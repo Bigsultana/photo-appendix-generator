@@ -1,0 +1,1977 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Photo Appendix Generator</title>
+  <style>
+:root {
+  --accent: #0d5a86;
+  --accent-strong: #08415f;
+  --accent-soft: #e8f4fa;
+  --surface: #ffffff;
+  --surface-alt: #f5f7f8;
+  --border: #d6dee3;
+  --text: #21313b;
+  --muted: #607381;
+  --danger: #a83232;
+  --ok: #2f6f4e;
+  --warning: #8a5a12;
+  --shadow: 0 10px 28px rgba(23, 42, 54, 0.12);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--text);
+  background: #edf2f5;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 78px;
+  padding: 16px 28px;
+  background: var(--accent);
+  color: #fff;
+}
+
+.topbar h1 {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+
+.topbar p {
+  margin: 4px 0 0;
+  color: #c8e8f5;
+  font-size: 13px;
+}
+
+.brand {
+  color: #c8e8f5;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+
+.runtime-notice {
+  max-width: 1480px;
+  margin: 14px auto 0;
+  padding: 12px 16px;
+  border: 1px solid #e0b75d;
+  border-radius: 8px;
+  background: #fff7e6;
+  color: #5f4108;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.js-enabled .runtime-notice { display: none; }
+.js-enabled .runtime-notice.show { display: block; }
+
+.app-shell {
+  display: grid;
+  grid-template-columns: minmax(300px, 380px) minmax(0, 1fr);
+  gap: 18px;
+  padding: 18px;
+  max-width: 1480px;
+  margin: 0 auto;
+}
+
+.settings-panel,
+.workspace {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+
+.settings-panel {
+  align-self: start;
+  padding: 18px;
+  position: sticky;
+  top: 14px;
+}
+
+.field-row,
+.field-grid label,
+.photo-fields label,
+.settings-group label,
+.bulk-caption label {
+  display: grid;
+  gap: 7px;
+}
+
+label span,
+.field-row label,
+.settings-group legend {
+  color: var(--accent-strong);
+  font-weight: 700;
+  font-size: 13px;
+}
+
+input[type="text"],
+input[type="file"],
+select,
+textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px;
+  font: inherit;
+  color: var(--text);
+  background: #fff;
+}
+
+textarea { resize: vertical; min-height: 80px; }
+
+.field-grid,
+.settings-group,
+.bulk-caption {
+  display: grid;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.settings-group {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+  background: var(--surface-alt);
+}
+
+.settings-group legend { padding: 0 6px; }
+
+.option-row {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.option-row label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+button {
+  border: 0;
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--accent);
+  cursor: pointer;
+}
+
+button:hover { background: var(--accent-strong); }
+button:disabled { opacity: 0.45; cursor: not-allowed; }
+button.quiet { background: #6b7a83; }
+button.quiet:hover { background: #52616a; }
+
+.help-text {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.workspace { padding: 18px; min-height: 620px; }
+
+.workspace-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: start;
+  margin-bottom: 14px;
+}
+
+.workspace h2 { margin: 0; font-size: 20px; }
+.workspace p { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
+.count-badge {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 10px;
+  color: var(--muted);
+  background: var(--surface-alt);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.drop-zone {
+  display: grid;
+  place-items: center;
+  gap: 4px;
+  min-height: 110px;
+  border: 2px dashed #a9c8d9;
+  border-radius: 8px;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  margin-bottom: 16px;
+}
+
+.drop-zone span { color: var(--muted); font-size: 13px; }
+.drop-zone.dragging { border-color: var(--accent); background: #dff0f8; }
+
+.photo-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.photo-item {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr) 92px;
+  gap: 14px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.photo-item.drag-over { outline: 3px solid #9ed0e8; }
+
+.thumb-wrap {
+  width: 150px;
+  aspect-ratio: 4 / 3;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.thumb-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.photo-fields { display: grid; gap: 10px; }
+.photo-meta { display: grid; gap: 4px; }
+.photo-title { color: var(--text); overflow-wrap: anywhere; }
+.meta-line { color: var(--muted); font-size: 13px; }
+.metadata-status { font-size: 12px; color: var(--warning); }
+.metadata-status.ok { color: var(--ok); }
+
+.order-controls {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+}
+
+.order-controls button {
+  padding: 8px 9px;
+  background: #eef4f7;
+  color: var(--accent-strong);
+  border: 1px solid var(--border);
+}
+
+.order-controls button[data-action="remove"] { color: var(--danger); }
+
+@media (max-width: 860px) {
+  .topbar { align-items: start; flex-direction: column; gap: 8px; }
+  .app-shell { grid-template-columns: 1fr; padding: 12px; }
+  .settings-panel { position: static; }
+  .photo-item { grid-template-columns: 112px minmax(0, 1fr); }
+  .thumb-wrap { width: 112px; }
+  .order-controls { grid-column: 1 / -1; grid-template-columns: repeat(3, 1fr); }
+}
+
+@media print {
+  body { background: #fff; }
+  .topbar, .settings-panel, .drop-zone, .workspace-head, .order-controls { display: none !important; }
+  .app-shell { display: block; padding: 0; max-width: none; }
+  .workspace { box-shadow: none; border: 0; padding: 0; }
+  .photo-list { gap: 18px; }
+  .photo-item { break-inside: avoid; grid-template-columns: 48% 1fr; border: 0; padding: 0 0 18px; }
+  textarea { border: 0; padding: 0; min-height: 0; resize: none; }
+}
+
+.file-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.primary-pickers .native-picker-card {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.native-picker-card span {
+  color: var(--accent-strong);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.logo-tools,
+.colour-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.logo-preview {
+  min-height: 58px;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  padding: 8px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.logo-preview img {
+  display: none;
+  max-width: 100%;
+  max-height: 52px;
+  object-fit: contain;
+}
+
+.export-panel {
+  max-width: 1480px;
+  margin: 0 auto 18px;
+  padding: 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+
+.export-panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+.export-panel h2 {
+  margin: 0 0 4px;
+  font-size: 20px;
+  color: var(--accent-strong);
+}
+
+.export-panel p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.export-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 12px 0;
+}
+
+.button-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.button-link:hover { background: var(--accent-strong); }
+.quiet-link { background: #6b7a83; }
+.quiet-link:hover { background: #52616a; }
+
+.export-frame {
+  width: 100%;
+  height: 78vh;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+}
+
+@media (max-width: 860px) {
+  input[type="file"] {
+    font-size: 16px;
+    min-height: 48px;
+  }
+
+  .actions,
+  .file-grid,
+  .colour-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .actions button,
+  .button-link,
+  .export-actions button {
+    width: 100%;
+    min-height: 48px;
+  }
+
+  .export-panel {
+    margin: 0 12px 18px;
+  }
+
+  .export-panel-head {
+    flex-direction: column;
+  }
+
+  .export-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .export-frame {
+    height: 70vh;
+  }
+}
+
+.manual-add-btn {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.photo-debug {
+  margin: 10px 0 0;
+  padding: 9px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface-alt);
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+</style>
+</head>
+<body class="no-js">
+  <header class="topbar">
+    <div>
+      <h1>Photo Appendix Generator</h1>
+      <p>Work-compatible browser version</p>
+    </div>
+    <div id="brandText" class="brand">PTG Consulting</div>
+  </header>
+
+  <div id="runtimeNotice" class="runtime-notice" role="status">
+    <strong>iPhone note:</strong> If this downloaded HTML is opened from the iPhone Files app, iOS may show the page but block the JavaScript needed to receive photos and export documents. For iPhone use, open the tool from a hosted Safari link instead of the Files app.
+  </div>
+
+  <main class="app-shell">
+    <section class="settings-panel" aria-label="Appendix settings">
+      <fieldset class="settings-group first-group">
+        <legend>Photos</legend>
+        <div class="file-grid native-file-inputs primary-pickers">
+          <label class="native-picker-card">
+            <span>Choose photos from library</span>
+            <input id="photoInput" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,image/*" multiple onchange="window.nativePhotoInputChanged && window.nativePhotoInputChanged(this, 'library', 'inline change')" oninput="window.nativePhotoInputChanged && window.nativePhotoInputChanged(this, 'library', 'inline input')" onclick="window.nativePhotoInputTouched && window.nativePhotoInputTouched(this, 'library')">
+          </label>
+          <label class="native-picker-card">
+            <span>Take photo with camera</span>
+            <input id="cameraInput" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,image/*" capture="environment" onchange="window.nativePhotoInputChanged && window.nativePhotoInputChanged(this, 'camera', 'inline change')" oninput="window.nativePhotoInputChanged && window.nativePhotoInputChanged(this, 'camera', 'inline input')" onclick="window.nativePhotoInputTouched && window.nativePhotoInputTouched(this, 'camera')">
+          </label>
+        </div>
+        <button id="manualAddBtn" type="button" class="quiet manual-add-btn">Add selected photo now / retry</button>
+        <p id="photoDebug" class="photo-debug">Photo picker status: waiting for selection.</p>
+        <p class="help-text">These are native browser inputs. Android can usually run this local file directly. iPhone should use a hosted Safari link; the Files app may open the camera/library but not return the selected photo to the app.</p>
+      </fieldset>
+
+      <fieldset class="settings-group">
+        <legend>Appendix details</legend>
+        <label>
+          <span>Appendix title</span>
+          <input id="appendixTitle" type="text" value="Appendix A - Site Photographs">
+        </label>
+        <label>
+          <span>Project name</span>
+          <input id="projectName" type="text" placeholder="PTG 02961 - 10 Marie Street, Goodna">
+        </label>
+        <label>
+          <span>Report date</span>
+          <input id="reportDate" type="text">
+        </label>
+        <label>
+          <span>Output name</span>
+          <input id="outputName" type="text" value="Photo_Appendix">
+        </label>
+      </fieldset>
+
+      <fieldset class="settings-group">
+        <legend>Branding</legend>
+        <label>
+          <span>Company name / footer text</span>
+          <input id="companyName" type="text" value="PTG Consulting">
+        </label>
+        <label>
+          <span>Logo</span>
+          <input id="logoInput" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml,image/*">
+        </label>
+        <div class="logo-tools">
+          <div class="logo-preview" aria-label="Logo preview">
+            <img id="logoPreview" alt="Company logo preview">
+            <span id="logoEmptyText">No logo selected</span>
+          </div>
+          <button id="clearLogoBtn" type="button" class="quiet">Clear logo</button>
+        </div>
+        <label>
+          <span>Colour preset</span>
+          <select id="colorPreset">
+            <option value="ptg" selected>PTG blue</option>
+            <option value="charcoal">Charcoal</option>
+            <option value="forest">Forest green</option>
+            <option value="maroon">Maroon</option>
+            <option value="custom">Custom</option>
+          </select>
+        </label>
+        <div class="colour-grid">
+          <label>
+            <span>Main colour</span>
+            <input id="accentColor" type="color" value="#0d5a86">
+          </label>
+          <label>
+            <span>Dark colour</span>
+            <input id="accentStrongColor" type="color" value="#08415f">
+          </label>
+        </div>
+      </fieldset>
+
+      <fieldset class="settings-group">
+        <legend>Appendix layout</legend>
+        <label>
+          <span>Photos per page</span>
+          <select id="photosPerPage">
+            <option value="1">1 photo per page</option>
+            <option value="2" selected>2 photos per page</option>
+          </select>
+        </label>
+        <label>
+          <span>Page orientation</span>
+          <select id="pageOrientation">
+            <option value="portrait" selected>A4 portrait</option>
+            <option value="landscape">A4 landscape</option>
+          </select>
+        </label>
+        <label>
+          <span>Image fit</span>
+          <select id="imageFit">
+            <option value="contain" selected>Show whole image</option>
+            <option value="cover">Crop to fill frame</option>
+          </select>
+        </label>
+        <label>
+          <span>Export image size</span>
+          <select id="exportImageSize">
+            <option value="1280" selected>Standard - smaller/faster</option>
+            <option value="1800">High - sharper/larger</option>
+            <option value="2400">Maximum - slowest/largest</option>
+          </select>
+        </label>
+      </fieldset>
+
+      <div class="option-row" aria-label="Caption options">
+        <label><input id="includeDate" type="checkbox" checked> Include date and time</label>
+        <label><input id="includeGps" type="checkbox" checked> Include GPS coordinates</label>
+        <label><input id="includeFilename" type="checkbox"> Include filename</label>
+        <label><input id="includeMapLink" type="checkbox"> Include Google Maps links in exports</label>
+      </div>
+
+      <div class="bulk-caption" aria-label="Bulk caption tools">
+        <label>
+          <span>Bulk caption prefix</span>
+          <input id="captionPrefix" type="text" placeholder="e.g. Site photograph showing">
+        </label>
+        <button id="applyPrefixBtn" type="button" class="quiet">Apply prefix to default captions</button>
+      </div>
+
+      <div class="actions" aria-label="Export actions">
+        <button id="printBtn" type="button">Print Appendix</button>
+        <button id="htmlBtn" type="button">Export HTML</button>
+        <button id="docBtn" type="button">Export Word DOC</button>
+        <button id="csvBtn" type="button">Export GPS CSV</button>
+        <button id="clearBtn" type="button" class="quiet">Clear</button>
+      </div>
+      <p class="help-text">DOC export is Word-compatible HTML, not a true DOCX template export. Large photo sets are compressed at export time for reliability. On phones, export opens a preview first because iPhone/iPad and Android browsers can block automatic downloads from local files.</p>
+    </section>
+
+    <section class="workspace" aria-label="Photo workspace">
+      <div class="workspace-head">
+        <div>
+          <h2>Photos</h2>
+          <p id="statusText">Select photos to begin.</p>
+        </div>
+        <div id="countBadge" class="count-badge">0 photos</div>
+      </div>
+
+      <div id="dropZone" class="drop-zone">
+        <strong>Drop photos here</strong>
+        <span>or use the file selector above</span>
+      </div>
+
+      <ol id="photoList" class="photo-list" aria-live="polite"></ol>
+    </section>
+  </main>
+
+  <template id="photoTemplate">
+    <li class="photo-item" draggable="true">
+      <div class="thumb-wrap"><img alt=""></div>
+      <div class="photo-fields">
+        <div class="photo-meta">
+          <strong class="photo-title"></strong>
+          <span class="meta-line"></span>
+          <span class="metadata-status"></span>
+        </div>
+        <label>
+          <span>Caption</span>
+          <textarea rows="3"></textarea>
+        </label>
+      </div>
+      <div class="order-controls">
+        <button type="button" data-action="up" title="Move up">Up</button>
+        <button type="button" data-action="down" title="Move down">Down</button>
+        <button type="button" data-action="remove" title="Remove">Remove</button>
+      </div>
+    </li>
+  </template>
+
+  <script>
+const STORAGE_KEY = "ptgPhotoAppendixSettingsV3";
+
+const COLOR_PRESETS = {
+  ptg: { accent: "#0d5a86", strong: "#08415f" },
+  charcoal: { accent: "#36454f", strong: "#202a30" },
+  forest: { accent: "#2f6f4e", strong: "#1f4a34" },
+  maroon: { accent: "#7b2636", strong: "#4f1722" },
+};
+
+const state = {
+  photos: [],
+  dragId: null,
+  logoDataUrl: "",
+  exportUrls: [],
+  lastNativeInput: null,
+  processedFileObjects: typeof WeakSet !== "undefined" ? new WeakSet() : null,
+};
+
+const els = {
+  photoInput: document.querySelector("#photoInput"),
+  cameraInput: document.querySelector("#cameraInput"),
+  appendixTitle: document.querySelector("#appendixTitle"),
+  projectName: document.querySelector("#projectName"),
+  reportDate: document.querySelector("#reportDate"),
+  outputName: document.querySelector("#outputName"),
+  companyName: document.querySelector("#companyName"),
+  brandText: document.querySelector("#brandText"),
+  logoInput: document.querySelector("#logoInput"),
+  logoPreview: document.querySelector("#logoPreview"),
+  logoEmptyText: document.querySelector("#logoEmptyText"),
+  clearLogoBtn: document.querySelector("#clearLogoBtn"),
+  colorPreset: document.querySelector("#colorPreset"),
+  accentColor: document.querySelector("#accentColor"),
+  accentStrongColor: document.querySelector("#accentStrongColor"),
+  photosPerPage: document.querySelector("#photosPerPage"),
+  pageOrientation: document.querySelector("#pageOrientation"),
+  imageFit: document.querySelector("#imageFit"),
+  exportImageSize: document.querySelector("#exportImageSize"),
+  includeDate: document.querySelector("#includeDate"),
+  includeGps: document.querySelector("#includeGps"),
+  includeFilename: document.querySelector("#includeFilename"),
+  includeMapLink: document.querySelector("#includeMapLink"),
+  captionPrefix: document.querySelector("#captionPrefix"),
+  applyPrefixBtn: document.querySelector("#applyPrefixBtn"),
+  manualAddBtn: document.querySelector("#manualAddBtn"),
+  photoDebug: document.querySelector("#photoDebug"),
+  printBtn: document.querySelector("#printBtn"),
+  htmlBtn: document.querySelector("#htmlBtn"),
+  docBtn: document.querySelector("#docBtn"),
+  csvBtn: document.querySelector("#csvBtn"),
+  clearBtn: document.querySelector("#clearBtn"),
+  statusText: document.querySelector("#statusText"),
+  countBadge: document.querySelector("#countBadge"),
+  dropZone: document.querySelector("#dropZone"),
+  photoList: document.querySelector("#photoList"),
+  template: document.querySelector("#photoTemplate"),
+};
+
+const settingsControls = [
+  els.appendixTitle,
+  els.projectName,
+  els.reportDate,
+  els.outputName,
+  els.companyName,
+  els.colorPreset,
+  els.accentColor,
+  els.accentStrongColor,
+  els.photosPerPage,
+  els.pageOrientation,
+  els.imageFit,
+  els.exportImageSize,
+  els.includeDate,
+  els.includeGps,
+  els.includeFilename,
+  els.includeMapLink,
+].filter(Boolean);
+
+initialiseSettings();
+initialiseRuntimeNotice();
+wireEvents();
+render();
+
+window.addEventListener("error", (event) => {
+  console.error(event.error || event.message);
+  if (els.statusText) els.statusText.textContent = `App error: ${event.message || "unknown error"}. Try reloading the page.`;
+});
+
+window.addEventListener("unhandledrejection", (event) => {
+  console.error(event.reason);
+  if (els.statusText) els.statusText.textContent = "App error while processing the photo. Try the other picker or reload the page.";
+});
+
+function initialiseRuntimeNotice() {
+  document.body.classList.remove("no-js");
+  document.body.classList.add("js-enabled");
+
+  const notice = document.querySelector("#runtimeNotice");
+  if (!notice) return;
+
+  const ios = isIOSDevice();
+  const localLike = isLocalOrPreviewMode();
+  if (ios && localLike) {
+    notice.classList.add("show");
+    notice.innerHTML = '<strong>iPhone Files mode detected:</strong> iOS can open the camera/library here but may not return the selected photo to the app. Use a hosted Safari link for iPhone field use. Android and desktop can usually run the local HTML file directly.';
+  }
+}
+
+function isIOSDevice() {
+  const ua = navigator.userAgent || "";
+  const platform = navigator.platform || "";
+  return /iPad|iPhone|iPod/i.test(ua) || (platform === "MacIntel" && navigator.maxTouchPoints > 1);
+}
+
+function isLocalOrPreviewMode() {
+  return !/^https?:$/i.test(window.location.protocol);
+}
+
+function wireEvents() {
+  setupNativePhotoInput(els.photoInput, "library");
+  setupNativePhotoInput(els.cameraInput, "camera");
+  if (els.manualAddBtn) {
+    els.manualAddBtn.addEventListener("click", manuallyAddSelectedPhotos);
+  }
+  window.nativePhotoInputChanged = handleNativePhotoInputChanged;
+  window.nativePhotoInputTouched = handleNativePhotoInputTouched;
+  ["focus", "pageshow"].forEach((eventName) => {
+    window.addEventListener(eventName, () => scheduleNativeInputChecks("page returned"));
+  });
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) scheduleNativeInputChecks("page visible");
+  });
+  els.dropZone.addEventListener("dragover", handleDragOver);
+  els.dropZone.addEventListener("dragleave", () => els.dropZone.classList.remove("dragging"));
+  els.dropZone.addEventListener("drop", handleDrop);
+  els.applyPrefixBtn.addEventListener("click", applyCaptionPrefix);
+  els.printBtn.addEventListener("click", printAppendix);
+  els.htmlBtn.addEventListener("click", () => exportAppendix("html"));
+  els.docBtn.addEventListener("click", () => exportAppendix("doc"));
+  els.csvBtn.addEventListener("click", downloadGpsCsv);
+  els.clearBtn.addEventListener("click", clearPhotos);
+  els.captionPrefix.addEventListener("input", render);
+
+  settingsControls.forEach((el) => el.addEventListener("change", handleSettingsChanged));
+  [els.appendixTitle, els.projectName, els.reportDate, els.outputName, els.companyName].forEach((el) => {
+    if (el) el.addEventListener("input", handleSettingsChanged);
+  });
+
+  els.colorPreset.addEventListener("change", applyPresetColours);
+  els.accentColor.addEventListener("input", () => markCustomColourAndApply());
+  els.accentStrongColor.addEventListener("input", () => markCustomColourAndApply());
+  els.logoInput.addEventListener("change", handleLogoChange);
+  els.clearLogoBtn.addEventListener("click", clearLogo);
+}
+
+function initialiseSettings() {
+  const fallbackDate = new Date().toLocaleDateString("en-AU", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+
+  els.reportDate.value = fallbackDate;
+
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+    Object.entries(saved).forEach(([key, value]) => {
+      if (key === "logoDataUrl") {
+        state.logoDataUrl = value || "";
+        return;
+      }
+      if (!els[key]) return;
+      if (els[key].type === "checkbox") els[key].checked = Boolean(value);
+      else els[key].value = value;
+    });
+  } catch (error) {
+    console.warn("Could not load saved settings", error);
+  }
+
+  applyBranding();
+}
+
+function handleSettingsChanged() {
+  applyBranding();
+  saveSettings();
+  render();
+}
+
+function saveSettings() {
+  const settings = { logoDataUrl: state.logoDataUrl };
+  settingsControls.forEach((el) => {
+    const key = Object.keys(els).find((name) => els[name] === el);
+    if (!key) return;
+    settings[key] = el.type === "checkbox" ? el.checked : el.value;
+  });
+
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+  } catch (error) {
+    console.warn("Could not save settings", error);
+  }
+}
+
+function applyPresetColours() {
+  const preset = COLOR_PRESETS[els.colorPreset.value];
+  if (preset) {
+    els.accentColor.value = preset.accent;
+    els.accentStrongColor.value = preset.strong;
+  }
+  handleSettingsChanged();
+}
+
+function markCustomColourAndApply() {
+  els.colorPreset.value = "custom";
+  handleSettingsChanged();
+}
+
+function applyBranding() {
+  const company = (els.companyName.value || "PTG Consulting").trim();
+  els.brandText.textContent = company;
+  document.documentElement.style.setProperty("--accent", els.accentColor.value || COLOR_PRESETS.ptg.accent);
+  document.documentElement.style.setProperty("--accent-strong", els.accentStrongColor.value || COLOR_PRESETS.ptg.strong);
+  updateLogoPreview();
+}
+
+async function handleLogoChange() {
+  const file = els.logoInput.files && els.logoInput.files[0];
+  if (!file) return;
+  try {
+    state.logoDataUrl = await readFileAsDataUrl(file);
+    els.logoInput.value = "";
+    applyBranding();
+    saveSettings();
+  } catch (error) {
+    console.error(error);
+    alert("Could not read the selected logo.");
+  }
+}
+
+function clearLogo() {
+  state.logoDataUrl = "";
+  els.logoInput.value = "";
+  applyBranding();
+  saveSettings();
+}
+
+function setupNativePhotoInput(input, label) {
+  if (!input) return;
+  input.addEventListener("click", () => handleNativePhotoInputTouched(input, label));
+  input.addEventListener("pointerdown", () => handleNativePhotoInputTouched(input, label));
+  input.addEventListener("touchstart", () => handleNativePhotoInputTouched(input, label), { passive: true });
+  input.addEventListener("change", () => handleNativePhotoInputChanged(input, label, "change"));
+  input.addEventListener("input", () => handleNativePhotoInputChanged(input, label, "input"));
+}
+
+function handleNativePhotoInputTouched(input, label) {
+  state.lastNativeInput = input;
+  const suffix = isIOSDevice() && isLocalOrPreviewMode()
+    ? " If this is iPhone Files mode and the status never changes, iOS is not returning the photo to the page; use a hosted Safari link."
+    : "";
+  debugPhotoPicker(`${friendlyPickerName(label)} opened. Waiting for the browser to return file access...${suffix}`);
+  if (els.statusText && !state.photos.length) els.statusText.textContent = "Photo picker opened. After choosing/taking a photo, the photo card should appear below.";
+  scheduleNativeInputChecks(`${label} picker opened`);
+}
+
+function handleNativePhotoInputChanged(input, label, source = "change") {
+  state.lastNativeInput = input;
+  const count = input && input.files ? input.files.length : 0;
+  debugPhotoPicker(`${friendlyPickerName(label)} ${source}: ${count} file${count === 1 ? "" : "s"} returned.`);
+  if (count) {
+    addFiles(input.files, input);
+  } else if (els.statusText) {
+    els.statusText.textContent = "The phone picker returned no photo. Try the retry button, or open the HTML in Safari/Chrome rather than the Files preview.";
+  }
+}
+
+function scheduleNativeInputChecks(reason) {
+  [250, 900, 1800, 3200].forEach((delay) => {
+    setTimeout(() => checkNativeInputsForFiles(reason, delay), delay);
+  });
+}
+
+function checkNativeInputsForFiles(reason, delay) {
+  [els.photoInput, els.cameraInput, state.lastNativeInput].filter(Boolean).forEach((input) => {
+    const count = input.files ? input.files.length : 0;
+    if (count) {
+      debugPhotoPicker(`Detected ${count} selected file${count === 1 ? "" : "s"} after ${delay} ms (${reason}).`);
+      addFiles(input.files, input);
+    }
+  });
+}
+
+function manuallyAddSelectedPhotos() {
+  const inputs = [els.photoInput, els.cameraInput].filter(Boolean);
+  const counts = inputs.map((input) => (input.files ? input.files.length : 0));
+  const total = counts.reduce((sum, count) => sum + count, 0);
+  debugPhotoPicker(`Manual retry tapped. Current native input file count: ${counts.join(" + ")} = ${total}.`);
+  if (!total) {
+    if (els.statusText) els.statusText.textContent = isIOSDevice() && isLocalOrPreviewMode()
+      ? "No selected photo is visible to the app. This confirms iPhone Files mode is not returning photo access; open the tool from a hosted Safari link."
+      : "No selected photo is visible to the app yet. Try the other picker or reload the page.";
+    return;
+  }
+  inputs.forEach((input) => {
+    if (input.files && input.files.length) addFiles(input.files, input);
+  });
+}
+
+function friendlyPickerName(label) {
+  return label === "camera" ? "Camera picker" : "Photo library picker";
+}
+
+function debugPhotoPicker(message) {
+  const stamped = `${new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })} - ${message}`;
+  if (els.photoDebug) els.photoDebug.textContent = `Photo picker status: ${stamped}`;
+  console.log(stamped);
+}
+
+function updateLogoPreview() {
+  if (state.logoDataUrl) {
+    els.logoPreview.src = state.logoDataUrl;
+    els.logoPreview.style.display = "block";
+    els.logoEmptyText.style.display = "none";
+    els.clearLogoBtn.disabled = false;
+  } else {
+    els.logoPreview.removeAttribute("src");
+    els.logoPreview.style.display = "none";
+    els.logoEmptyText.style.display = "block";
+    els.clearLogoBtn.disabled = true;
+  }
+}
+
+async function addFiles(fileList, inputElement) {
+  const selected = Array.from(fileList || []);
+  const trustedPhotoInput = inputElement && [els.photoInput, els.cameraInput].includes(inputElement);
+  const files = selected.filter((file) => isImageFile(file) || trustedPhotoInput);
+  const rejected = selected.length - files.length;
+
+  if (!files.length) {
+    els.statusText.textContent = rejected
+      ? "The selected file was not recognised as an image. Try the camera input, tap Add selected photo now / retry, or open the HTML in Safari/Chrome."
+      : "No photo was selected.";
+    clearInputIfSafe(inputElement);
+    return;
+  }
+
+  const existing = new Set(state.photos.map((photo) => fileSignature(photo.file)).filter(hasMeaningfulSignature));
+  const uniqueFiles = [];
+  let skipped = 0;
+
+  files.forEach((file) => {
+    if (state.processedFileObjects && state.processedFileObjects.has(file)) {
+      skipped += 1;
+      return;
+    }
+    const signature = fileSignature(file);
+    if (hasMeaningfulSignature(signature) && existing.has(signature)) {
+      skipped += 1;
+      return;
+    }
+    if (hasMeaningfulSignature(signature)) existing.add(signature);
+    if (state.processedFileObjects) state.processedFileObjects.add(file);
+    uniqueFiles.push(file);
+  });
+
+  if (!uniqueFiles.length) {
+    els.statusText.textContent = `Skipped ${skipped} duplicate photo${skipped === 1 ? "" : "s"}.`;
+    clearInputIfSafe(inputElement);
+    return;
+  }
+
+  removeExportPanel();
+  removeCsvPanel();
+
+  // iPhone/iPad can return photo-library files that stall while a preview or EXIF
+  // is being created. Create the visible photo cards first, then hydrate previews
+  // and metadata in the background so the add action never appears to do nothing.
+  const newPhotos = uniqueFiles.map((file, offset) => createPhotoRecord(file, state.photos.length + offset + 1));
+  state.photos.push(...newPhotos);
+  render();
+  els.statusText.textContent = `Added ${newPhotos.length} photo${newPhotos.length === 1 ? "" : "s"}. Loading previews and metadata...`;
+
+  clearInputIfSafe(inputElement);
+  scrollToPhotosOnSmallScreens();
+
+  hydratePhotoRecords(newPhotos).then(() => {
+    const messages = [];
+    messages.push(`Added ${newPhotos.length} photo${newPhotos.length === 1 ? "" : "s"}.`);
+    if (skipped) messages.push(`Skipped ${skipped} duplicate${skipped === 1 ? "" : "s"}.`);
+    if (rejected) messages.push(`${rejected} selected file${rejected === 1 ? " was" : "s were"} not recognised as an image.`);
+    els.statusText.textContent = messages.join(" ");
+    render();
+  });
+}
+
+function createPhotoRecord(file, fallbackNumber = 1) {
+  const name = displayFileName(file, fallbackNumber);
+  return {
+    id: createId(),
+    file,
+    displayName: name,
+    url: placeholderDataUrl(name),
+    revokeUrl: false,
+    caption: defaultCaption(file, fallbackNumber),
+    metadata: {},
+    previewStatus: "Loading preview...",
+    previewError: "",
+    metadataPending: true,
+  };
+}
+
+async function hydratePhotoRecords(photos) {
+  for (let i = 0; i < photos.length; i += 1) {
+    const photo = photos[i];
+    await hydratePhotoRecord(photo);
+    render();
+    await waitOneFrame();
+  }
+}
+
+async function hydratePhotoRecord(photo) {
+  try {
+    const preview = await createPreviewUrl(photo.file);
+    revokePhotoPreview(photo);
+    photo.url = preview.url;
+    photo.revokeUrl = preview.revoke;
+    photo.previewStatus = "";
+  } catch (error) {
+    console.warn("Could not create photo preview", error);
+    photo.previewStatus = "Preview unavailable, but the photo is still attached";
+    photo.previewError = error && error.message ? error.message : "preview failed";
+  }
+
+  try {
+    photo.metadata = await readMetadata(photo.file);
+  } catch (error) {
+    console.warn("Could not read metadata", error);
+    photo.metadata = {};
+  } finally {
+    photo.metadataPending = false;
+  }
+}
+
+async function createPreviewUrl(file) {
+  if (window.URL && typeof URL.createObjectURL === "function") {
+    try {
+      return { url: URL.createObjectURL(file), revoke: true };
+    } catch (error) {
+      console.warn("Object URL preview failed; falling back to data URL", error);
+    }
+  }
+
+  return { url: await readFileAsDataUrl(file), revoke: false };
+}
+
+function isImageFile(file) {
+  if (!file) return false;
+  if (file.type && file.type.toLowerCase().startsWith("image/")) return true;
+  return /\.(jpe?g|png|webp|gif|bmp|heic|heif)$/i.test(file.name || "");
+}
+
+function clearInputIfSafe(inputElement) {
+  if (!inputElement) return;
+  // On iPhone/iPad opened from Files, clearing the input can release the selected
+  // file before preview/export has finished. Keep the native picker value on the
+  // mobile/manual path; users can use Clear to reset the appendix instead.
+  if (useManualExportFlow()) return;
+  inputElement.value = "";
+}
+
+function scrollToPhotosOnSmallScreens() {
+  const smallScreen = window.matchMedia && window.matchMedia("(max-width: 860px)").matches;
+  if (!smallScreen || !els.photoList) return;
+  setTimeout(() => {
+    try {
+      els.photoList.scrollIntoView({ behavior: "smooth", block: "start" });
+    } catch (error) {
+      els.photoList.scrollIntoView();
+    }
+  }, 150);
+}
+
+function setBusy(isBusy, message) {
+  [
+    els.photoInput,
+    els.cameraInput,
+    els.logoInput,
+    els.printBtn,
+    els.htmlBtn,
+    els.docBtn,
+    els.csvBtn,
+    els.clearBtn,
+    els.applyPrefixBtn,
+    els.manualAddBtn,
+  ].filter(Boolean).forEach((el) => {
+    el.disabled = isBusy;
+  });
+  if (message) els.statusText.textContent = message;
+}
+
+function createId() {
+  const cryptoApi = window.crypto || window.msCrypto;
+  if (cryptoApi && typeof cryptoApi.randomUUID === "function") return cryptoApi.randomUUID();
+  return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+}
+
+function fileSignature(file) {
+  return `${file.name || "unnamed"}|${file.size || 0}|${file.lastModified || 0}`;
+}
+
+
+function hasMeaningfulSignature(signature) {
+  return Boolean(signature && !/^unnamed\|0\|0$/.test(signature));
+}
+
+function displayFileName(file, fallbackNumber = 1) {
+  const raw = file && typeof file.name === "string" ? file.name.trim() : "";
+  if (raw) return raw;
+  const type = (file && file.type ? file.type : "").toLowerCase();
+  const extension = type.includes("png")
+    ? "png"
+    : type.includes("webp")
+      ? "webp"
+      : type.includes("heic")
+        ? "heic"
+        : type.includes("heif")
+          ? "heif"
+          : "jpg";
+  return `iPhone_Photo_${fallbackNumber}.${extension}`;
+}
+
+function placeholderDataUrl(label) {
+  const safe = escapeHtml(label || "Photo preview loading");
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+    <rect width="800" height="600" fill="#f5f7f8"/>
+    <rect x="40" y="40" width="720" height="520" rx="24" fill="none" stroke="#d6dee3" stroke-width="8"/>
+    <text x="400" y="285" font-family="Arial, Helvetica, sans-serif" font-size="34" fill="#607381" text-anchor="middle">Photo selected</text>
+    <text x="400" y="335" font-family="Arial, Helvetica, sans-serif" font-size="22" fill="#607381" text-anchor="middle">${safe}</text>
+  </svg>`;
+  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+}
+
+function readFileAsDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.addEventListener("load", () => resolve(reader.result));
+    reader.addEventListener("error", () => reject(reader.error));
+    reader.readAsDataURL(file);
+  });
+}
+
+function handleDragOver(event) {
+  event.preventDefault();
+  els.dropZone.classList.add("dragging");
+}
+
+function handleDrop(event) {
+  event.preventDefault();
+  els.dropZone.classList.remove("dragging");
+  addFiles(event.dataTransfer.files);
+}
+
+function render() {
+  els.photoList.innerHTML = "";
+
+  state.photos.forEach((photo, index) => {
+    const node = els.template.content.firstElementChild.cloneNode(true);
+    node.dataset.id = photo.id;
+    node.querySelector("img").src = photo.url;
+    node.querySelector("img").alt = photo.displayName || displayFileName(photo.file, index + 1);
+    node.querySelector(".photo-title").textContent = `Photo ${index + 1}: ${photo.displayName || displayFileName(photo.file, index + 1)}`;
+    node.querySelector(".meta-line").textContent = metaText(photo);
+
+    const status = node.querySelector(".metadata-status");
+    status.textContent = metadataStatus(photo);
+    status.classList.toggle("ok", Boolean(photo.metadata.dateText && photo.metadata.gps));
+
+    const textarea = node.querySelector("textarea");
+    textarea.value = photo.caption;
+    textarea.addEventListener("input", () => {
+      photo.caption = textarea.value;
+    });
+
+    node.addEventListener("dragstart", () => {
+      state.dragId = photo.id;
+      node.classList.add("drag-over");
+    });
+    node.addEventListener("dragend", () => {
+      state.dragId = null;
+      node.classList.remove("drag-over");
+    });
+    node.addEventListener("dragover", (event) => event.preventDefault());
+    node.addEventListener("drop", (event) => {
+      event.preventDefault();
+      movePhoto(state.dragId, photo.id);
+    });
+
+    node.querySelector("[data-action='up']").disabled = index === 0;
+    node.querySelector("[data-action='down']").disabled = index === state.photos.length - 1;
+    node.querySelector("[data-action='up']").addEventListener("click", () => swap(index, index - 1));
+    node.querySelector("[data-action='down']").addEventListener("click", () => swap(index, index + 1));
+    node.querySelector("[data-action='remove']").addEventListener("click", () => removePhoto(photo.id));
+
+    els.photoList.appendChild(node);
+  });
+
+  const count = state.photos.length;
+  const gpsCount = state.photos.filter((photo) => photo.metadata.gps).length;
+  els.countBadge.textContent = `${count} photo${count === 1 ? "" : "s"}`;
+  els.statusText.textContent = count
+    ? `Ready. ${gpsCount}/${count} photo${count === 1 ? "" : "s"} include GPS metadata.`
+    : "Select photos to begin.";
+
+  const hasPhotos = count > 0;
+  [els.printBtn, els.htmlBtn, els.docBtn, els.clearBtn].forEach((button) => {
+    button.disabled = !hasPhotos;
+  });
+  els.csvBtn.disabled = !hasPhotos;
+  els.applyPrefixBtn.disabled = !hasPhotos || !els.captionPrefix.value.trim();
+  updateLogoPreview();
+}
+
+function defaultCaption(file, fallbackNumber = 1) {
+  const name = displayFileName(file, fallbackNumber);
+  return name.replace(/\.[^.]+$/, "").replace(/[_-]+/g, " ").trim() || `Photo ${fallbackNumber}`;
+}
+
+function metaText(photo) {
+  const parts = [];
+  if (els.includeDate.checked && photo.metadata.dateText) parts.push(photo.metadata.dateText);
+  if (els.includeGps.checked && photo.metadata.gps) parts.push(formatGps(photo.metadata.gps, 6));
+  if (els.includeFilename.checked) parts.push(photo.displayName || displayFileName(photo.file));
+  if (!parts.length) return "No selected metadata found";
+  return parts.join(" | ");
+}
+
+function metadataStatus(photo) {
+  if (photo.previewStatus) return photo.previewStatus;
+  if (photo.metadataPending) return "Reading metadata...";
+  const found = [];
+  const missing = [];
+  if (photo.metadata.dateText) found.push("date");
+  else missing.push("date");
+  if (photo.metadata.gps) found.push("GPS");
+  else missing.push("GPS");
+  if (!found.length) return "No JPEG EXIF date or GPS metadata detected";
+  if (!missing.length) return "EXIF date and GPS detected";
+  return `Detected ${found.join(" and ")}; missing ${missing.join(" and ")}`;
+}
+
+function formatGps(gps, decimals = 6) {
+  return `${gps.lat.toFixed(decimals)}, ${gps.lon.toFixed(decimals)}`;
+}
+
+function swap(from, to) {
+  if (to < 0 || to >= state.photos.length) return;
+  const [item] = state.photos.splice(from, 1);
+  state.photos.splice(to, 0, item);
+  render();
+}
+
+function movePhoto(sourceId, targetId) {
+  if (!sourceId || sourceId === targetId) return;
+  const sourceIndex = state.photos.findIndex((photo) => photo.id === sourceId);
+  const targetIndex = state.photos.findIndex((photo) => photo.id === targetId);
+  if (sourceIndex < 0 || targetIndex < 0) return;
+  const [item] = state.photos.splice(sourceIndex, 1);
+  state.photos.splice(targetIndex, 0, item);
+  render();
+}
+
+function removePhoto(id) {
+  const photo = state.photos.find((item) => item.id === id);
+  if (photo) revokePhotoPreview(photo);
+  state.photos = state.photos.filter((item) => item.id !== id);
+  render();
+}
+
+function revokePhotoPreview(photo) {
+  if (photo && photo.revokeUrl && window.URL && typeof URL.revokeObjectURL === "function") {
+    URL.revokeObjectURL(photo.url);
+  }
+}
+
+function clearPhotos() {
+  if (state.photos.length && !confirm("Clear all selected photos and captions?")) return;
+  state.photos.forEach(revokePhotoPreview);
+  state.photos = [];
+  removeExportPanel();
+  render();
+}
+
+function applyCaptionPrefix() {
+  const prefix = els.captionPrefix.value.trim();
+  if (!prefix) return;
+
+  state.photos.forEach((photo) => {
+    const defaultText = defaultCaption(photo.file);
+    if (!photo.caption.trim() || photo.caption === defaultText) {
+      photo.caption = `${prefix} ${defaultText}`.trim();
+    }
+  });
+
+  render();
+}
+
+async function readMetadata(file) {
+  if (!isJpegFile(file)) return {};
+  try {
+    const buffer = await file.arrayBuffer();
+    return parseExif(buffer);
+  } catch (error) {
+    console.warn("Could not read EXIF metadata", error);
+    return {};
+  }
+}
+
+function isJpegFile(file) {
+  const type = (file.type || "").toLowerCase();
+  return type.includes("jpeg") || /\.jpe?g$/i.test(file.name || "");
+}
+
+function parseExif(buffer) {
+  const view = new DataView(buffer);
+  if (view.byteLength < 4 || view.getUint16(0) !== 0xffd8) return {};
+
+  let offset = 2;
+  while (offset + 4 < view.byteLength) {
+    if (view.getUint8(offset) !== 0xff) break;
+    const marker = view.getUint8(offset + 1);
+    const size = view.getUint16(offset + 2);
+    if (marker === 0xe1 && readAscii(view, offset + 4, 6) === "Exif\0\0") {
+      return parseTiff(view, offset + 10);
+    }
+    offset += 2 + size;
+  }
+  return {};
+}
+
+function parseTiff(view, tiffStart) {
+  if (tiffStart + 8 > view.byteLength) return {};
+  const endian = readAscii(view, tiffStart, 2);
+  const little = endian === "II";
+  const get32 = (offset) => (offset + 4 <= view.byteLength ? view.getUint32(offset, little) : 0);
+  const firstIfd = tiffStart + get32(tiffStart + 4);
+  if (firstIfd <= tiffStart || firstIfd >= view.byteLength) return {};
+  const ifd0 = readIfd(view, firstIfd, tiffStart, little);
+  const result = {};
+
+  if (ifd0.tags[0x0132]) result.dateText = formatExifDate(ifd0.tags[0x0132]);
+
+  if (ifd0.tags[0x8769]) {
+    const exif = readIfd(view, tiffStart + ifd0.tags[0x8769], tiffStart, little);
+    if (exif.tags[0x9003]) result.dateText = formatExifDate(exif.tags[0x9003]);
+  }
+
+  if (ifd0.tags[0x8825]) {
+    const gps = readIfd(view, tiffStart + ifd0.tags[0x8825], tiffStart, little);
+    const lat = gpsCoordinate(gps.tags[1], gps.tags[2]);
+    const lon = gpsCoordinate(gps.tags[3], gps.tags[4]);
+    if (Number.isFinite(lat) && Number.isFinite(lon)) result.gps = { lat, lon };
+  }
+
+  return result;
+}
+
+function readIfd(view, offset, tiffStart, little) {
+  if (offset < 0 || offset + 2 > view.byteLength) return { tags: {} };
+  const get16 = (pos) => (pos + 2 <= view.byteLength ? view.getUint16(pos, little) : 0);
+  const get32 = (pos) => (pos + 4 <= view.byteLength ? view.getUint32(pos, little) : 0);
+  const count = get16(offset);
+  const tags = {};
+
+  for (let i = 0; i < count; i += 1) {
+    const entry = offset + 2 + i * 12;
+    if (entry + 12 > view.byteLength) break;
+    const tag = get16(entry);
+    const type = get16(entry + 2);
+    const length = get32(entry + 4);
+    const valueOffset = entry + 8;
+    tags[tag] = readTagValue(view, type, length, valueOffset, tiffStart, little);
+  }
+
+  return { tags };
+}
+
+function readTagValue(view, type, length, valueOffset, tiffStart, little) {
+  const typeSizes = { 1: 1, 2: 1, 3: 2, 4: 4, 5: 8, 7: 1, 10: 8 };
+  const total = (typeSizes[type] || 1) * length;
+  const dataOffset = total <= 4 ? valueOffset : tiffStart + view.getUint32(valueOffset, little);
+
+  if (dataOffset < 0 || dataOffset >= view.byteLength) return null;
+  if (type === 2) return readAscii(view, dataOffset, length).replace(/\0+$/, "");
+  if (type === 3) return Array.from({ length }, (_, i) => view.getUint16(dataOffset + i * 2, little));
+  if (type === 4) {
+    return length === 1
+      ? view.getUint32(dataOffset, little)
+      : Array.from({ length }, (_, i) => view.getUint32(dataOffset + i * 4, little));
+  }
+  if (type === 5) {
+    return Array.from({ length }, (_, i) => {
+      const pos = dataOffset + i * 8;
+      if (pos + 8 > view.byteLength) return null;
+      const denominator = view.getUint32(pos + 4, little) || 1;
+      return view.getUint32(pos, little) / denominator;
+    });
+  }
+  return null;
+}
+
+function gpsCoordinate(ref, values) {
+  if (!ref || !Array.isArray(values) || values.length < 3) return null;
+  const direction = String(ref).trim().toUpperCase();
+  const decimal = values[0] + values[1] / 60 + values[2] / 3600;
+  return direction === "S" || direction === "W" ? -decimal : decimal;
+}
+
+function readAscii(view, offset, length) {
+  let text = "";
+  for (let i = 0; i < length && offset + i < view.byteLength; i += 1) {
+    text += String.fromCharCode(view.getUint8(offset + i));
+  }
+  return text;
+}
+
+function formatExifDate(value) {
+  const match = String(value).match(/^(\d{4}):(\d{2}):(\d{2})\s+(\d{2}:\d{2}:\d{2})/);
+  if (!match) return String(value);
+  return `${match[3]}/${match[2]}/${match[1]} ${match[4]}`;
+}
+
+function ensurePhotosBeforeExport() {
+  if (state.photos.length) return true;
+  manuallyAddSelectedPhotos();
+  if (state.photos.length) return true;
+  const message = isIOSDevice() && isLocalOrPreviewMode()
+    ? "No photos have registered. iPhone Files mode is not returning photo access to this local HTML file. Open the tool from a hosted Safari link, then add photos again."
+    : "No photos have registered in the app yet. Check the Photo picker status line, then tap Add selected photo now / retry after taking or choosing a photo.";
+  if (els.statusText) els.statusText.textContent = message;
+  alert(message);
+  return false;
+}
+
+async function printAppendix() {
+  if (!ensurePhotosBeforeExport()) return;
+
+  if (useManualExportFlow()) {
+    await buildAndShowExportPanel("print");
+    return;
+  }
+
+  const printWindow = window.open("", "_blank");
+  if (!printWindow) {
+    await buildAndShowExportPanel("print");
+    return;
+  }
+
+  printWindow.document.open();
+  printWindow.document.write("<p style='font-family:Arial;padding:20px'>Preparing appendix for print...</p>");
+  printWindow.document.close();
+
+  try {
+    setBusy(true, "Preparing appendix images for print...");
+    const exportPhotos = await prepareExportPhotos();
+    const html = exportDocumentHtml(exportPhotos);
+    printWindow.document.open();
+    printWindow.document.write(html);
+    printWindow.document.close();
+    await waitForDocumentImages(printWindow.document);
+    printWindow.focus();
+    printWindow.print();
+  } catch (error) {
+    console.error(error);
+    alert("The print preview could not be prepared. Try Export HTML and print from the export preview.");
+    printWindow.close();
+  } finally {
+    setBusy(false);
+    render();
+  }
+}
+
+async function exportAppendix(type) {
+  if (!ensurePhotosBeforeExport()) return;
+
+  if (useManualExportFlow()) {
+    await buildAndShowExportPanel(type);
+    return;
+  }
+
+  try {
+    setBusy(true, `Preparing ${type === "doc" ? "Word DOC" : "HTML"} export...`);
+    const exportPhotos = await prepareExportPhotos();
+    const html = exportDocumentHtml(exportPhotos);
+    const base = safeOutputName();
+    if (type === "doc") {
+      downloadBlob(new Blob([html], { type: "application/msword" }), `${base}.doc`);
+    } else {
+      downloadBlob(new Blob([html], { type: "text/html" }), `${base}.html`);
+    }
+    showExportPanel(html, type, "Download started. If your browser blocks it, use the manual links below.");
+  } catch (error) {
+    console.error(error);
+    alert("The export could not be prepared. Try reducing Export image size to Standard, or use fewer photos.");
+  } finally {
+    setBusy(false);
+    render();
+  }
+}
+
+async function buildAndShowExportPanel(type) {
+  try {
+    setBusy(true, `Preparing ${type === "print" ? "print preview" : "export preview"}...`);
+    const exportPhotos = await prepareExportPhotos();
+    const html = exportDocumentHtml(exportPhotos);
+    showExportPanel(html, type, "Preview ready. Use the buttons in the export panel below.");
+  } catch (error) {
+    console.error(error);
+    alert("The preview could not be prepared. Try Export image size = Standard or use fewer photos.");
+  } finally {
+    setBusy(false);
+    render();
+  }
+}
+
+function useManualExportFlow() {
+  const ua = navigator.userAgent || "";
+  const mobile = /iphone|ipad|ipod|android/i.test(ua);
+  const localFile = window.location.protocol === "file:" || window.location.protocol === "";
+  return mobile || localFile;
+}
+
+async function prepareExportPhotos() {
+  const maxEdge = Number(els.exportImageSize.value) || 1280;
+  const prepared = [];
+  for (let i = 0; i < state.photos.length; i += 1) {
+    const photo = state.photos[i];
+    els.statusText.textContent = `Compressing export image ${i + 1} of ${state.photos.length}...`;
+    let exportDataUrl;
+    try {
+      exportDataUrl = await fileToExportDataUrl(photo.file, maxEdge, photo.displayName || displayFileName(photo.file, i + 1));
+    } catch (error) {
+      console.warn("Could not prepare export image; using placeholder", error);
+      exportDataUrl = placeholderDataUrl(photo.displayName || displayFileName(photo.file, i + 1));
+    }
+    prepared.push({ ...photo, exportDataUrl });
+    await waitOneFrame();
+  }
+  return prepared;
+}
+
+async function fileToExportDataUrl(file, maxEdge, fallbackName = "Photo") {
+  try {
+    if (/\.svg$/i.test(file.name || "") || (file.type || "").includes("svg")) {
+      return await readFileAsDataUrl(file);
+    }
+    const sourceUrl = URL.createObjectURL(file);
+    try {
+      const image = await loadImage(sourceUrl);
+      const { width, height } = scaleToFit(image.naturalWidth || image.width, image.naturalHeight || image.height, maxEdge);
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.max(1, Math.round(width));
+      canvas.height = Math.max(1, Math.round(height));
+      const ctx = canvas.getContext("2d");
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+      return canvas.toDataURL("image/jpeg", 0.84);
+    } finally {
+      URL.revokeObjectURL(sourceUrl);
+    }
+  } catch (error) {
+    console.warn("Falling back to original image data", error);
+    try {
+      return await readFileAsDataUrl(file);
+    } catch (readError) {
+      console.warn("Original image data could not be read", readError);
+      return placeholderDataUrl(fallbackName);
+    }
+  }
+}
+
+function loadImage(url) {
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    image.addEventListener("load", () => resolve(image));
+    image.addEventListener("error", () => reject(new Error("Image could not be decoded")));
+    image.src = url;
+  });
+}
+
+function scaleToFit(width, height, maxEdge) {
+  const edge = Math.max(width || maxEdge, height || maxEdge);
+  const scale = edge > maxEdge ? maxEdge / edge : 1;
+  return { width: (width || maxEdge) * scale, height: (height || maxEdge) * scale };
+}
+
+function exportDocumentHtml(exportPhotos) {
+  const title = escapeHtml(els.appendixTitle.value || "Appendix A - Site Photographs");
+  const project = escapeHtml(els.projectName.value || "");
+  const date = escapeHtml(els.reportDate.value || "");
+  const company = escapeHtml(els.companyName.value || "PTG Consulting");
+  const accent = escapeHtml(els.accentColor.value || COLOR_PRESETS.ptg.accent);
+  const strong = escapeHtml(els.accentStrongColor.value || COLOR_PRESETS.ptg.strong);
+  const logoHtml = state.logoDataUrl
+    ? `<img class="doc-logo" src="${state.logoDataUrl}" alt="${company} logo">`
+    : `<div class="doc-company-mark">${company}</div>`;
+  const perPage = Number(els.photosPerPage.value) || 2;
+  const orientation = els.pageOrientation.value === "landscape" ? "landscape" : "portrait";
+  const fit = els.imageFit.value === "cover" ? "cover" : "contain";
+  const chunks = chunkPhotos(exportPhotos, perPage);
+  const pages = chunks.map((photos, pageIndex) => renderExportPage({
+    photos,
+    pageIndex,
+    title,
+    project,
+    date,
+    company,
+    logoHtml,
+    perPage,
+    totalPages: chunks.length,
+  })).join("\n");
+
+  return `<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${title}</title>
+<style>
+  @page { size: A4 ${orientation}; margin: 12mm; }
+  * { box-sizing: border-box; }
+  body { font-family: Arial, sans-serif; color: #1f2f38; margin: 0; background: #fff; }
+  .appendix-page { page-break-after: always; min-height: ${orientation === "landscape" ? "186mm" : "273mm"}; }
+  .appendix-page:last-child { page-break-after: auto; }
+  .doc-header { border-bottom: 3px solid ${accent}; padding-bottom: 8px; margin-bottom: 12px; display: table; width: 100%; }
+  .doc-header-main { display: table-cell; vertical-align: bottom; }
+  .doc-header-logo { display: table-cell; vertical-align: middle; text-align: right; width: 42mm; }
+  .doc-logo { max-width: 38mm; max-height: 18mm; object-fit: contain; }
+  .doc-company-mark { color: ${strong}; font-weight: 700; font-size: 12px; }
+  .doc-title { color: ${accent}; font-size: 22px; font-weight: 700; margin: 0 0 6px; }
+  .doc-meta { width: 100%; border-collapse: collapse; font-size: 11px; color: #3c4f5b; }
+  .doc-meta td { padding: 2px 8px 2px 0; vertical-align: top; }
+  .label { color: #607381; font-weight: 700; width: 90px; }
+  .photo-card { border: 1px solid #cbd6dc; padding: 8px; page-break-inside: avoid; margin-bottom: 10px; }
+  .photo-heading { margin: 0 0 6px; color: ${accent}; font-size: 13px; font-weight: 700; }
+  .image-frame { border: 1px solid #d6dee3; background: #f5f7f8; text-align: center; overflow: hidden; }
+  .image-frame img { max-width: 100%; width: 100%; height: 100%; object-fit: ${fit}; display: block; }
+  .photo-grid.one .image-frame { height: ${orientation === "landscape" ? "130mm" : "175mm"}; }
+  .photo-grid.two .image-frame { height: ${orientation === "landscape" ? "78mm" : "92mm"}; }
+  .caption { font-size: 11px; line-height: 1.35; margin: 8px 0 3px; font-weight: 700; }
+  .meta-table { width: 100%; border-collapse: collapse; font-size: 9.5px; color: #526875; }
+  .meta-table td { padding: 1px 5px 1px 0; vertical-align: top; }
+  .meta-table .label { width: 56px; color: #607381; }
+  .map-link { color: ${accent}; text-decoration: none; }
+  .doc-footer { border-top: 1px solid #d6dee3; margin-top: 10px; padding-top: 5px; color: #607381; font-size: 9.5px; width: 100%; }
+  .doc-footer td { vertical-align: top; }
+  .doc-footer .right { text-align: right; }
+  @media screen {
+    body { background: #edf2f5; padding: 18px; }
+    .appendix-page { background: #fff; max-width: ${orientation === "landscape" ? "297mm" : "210mm"}; min-height: ${orientation === "landscape" ? "210mm" : "297mm"}; margin: 0 auto 18px; padding: 12mm; box-shadow: 0 10px 28px rgba(23, 42, 54, 0.16); }
+  }
+</style>
+</head>
+<body>
+  ${pages || renderEmptyExport(title, project, date)}
+</body>
+</html>`;
+}
+
+function renderExportPage({ photos, pageIndex, title, project, date, company, logoHtml, perPage, totalPages }) {
+  const className = perPage === 1 ? "one" : "two";
+  const photoCards = photos.map((photo) => renderPhotoCard(photo, state.photos.findIndex((item) => item.id === photo.id) + 1)).join("\n");
+  const generated = new Date().toLocaleString("en-AU", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  return `<section class="appendix-page">
+    <header class="doc-header">
+      <div class="doc-header-main">
+        <h1 class="doc-title">${title}</h1>
+        <table class="doc-meta">
+          <tr>
+            <td class="label">Project</td><td>${project || "&nbsp;"}</td>
+            <td class="label">Date</td><td>${date || "&nbsp;"}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="doc-header-logo">${logoHtml}</div>
+    </header>
+    <main class="photo-grid ${className}">
+      ${photoCards}
+    </main>
+    <table class="doc-footer">
+      <tr>
+        <td>${company}</td>
+        <td class="right">Page ${pageIndex + 1} of ${totalPages} | Generated ${escapeHtml(generated)}</td>
+      </tr>
+    </table>
+  </section>`;
+}
+
+function renderPhotoCard(photo, number) {
+  const caption = escapeHtml(photo.caption || `Photo ${number}`).replace(/\n/g, "<br>");
+  return `<article class="photo-card">
+    <h2 class="photo-heading">Photo ${number}</h2>
+    <div class="image-frame"><img src="${photo.exportDataUrl}" alt="${escapeHtml(photo.displayName || displayFileName(photo.file, number))}"></div>
+    <div>
+      <p class="caption">${caption}</p>
+      ${renderMetadataTable(photo)}
+    </div>
+  </article>`;
+}
+
+function renderMetadataTable(photo) {
+  const rows = [];
+  if (els.includeDate.checked && photo.metadata.dateText) rows.push(["Date", photo.metadata.dateText]);
+  if (els.includeGps.checked && photo.metadata.gps) rows.push(["GPS", formatGps(photo.metadata.gps, 8)]);
+  if (els.includeFilename.checked) rows.push(["File", photo.displayName || displayFileName(photo.file)]);
+  if (els.includeMapLink.checked && photo.metadata.gps) {
+    const link = googleMapsUrl(photo.metadata.gps);
+    rows.push(["Map", `<a class="map-link" href="${link}">${link}</a>`]);
+  }
+  if (!rows.length) return "";
+
+  return `<table class="meta-table">${rows.map(([label, value]) => {
+    const safeValue = String(value).startsWith("<a ") ? value : escapeHtml(value);
+    return `<tr><td class="label">${escapeHtml(label)}</td><td>${safeValue}</td></tr>`;
+  }).join("")}</table>`;
+}
+
+function renderEmptyExport(title, project, date) {
+  return `<section class="appendix-page">
+    <header class="doc-header"><h1 class="doc-title">${title}</h1></header>
+    <p>${project}${project && date ? " | " : ""}${date}</p>
+    <p>No photos selected.</p>
+  </section>`;
+}
+
+function showExportPanel(html, type, message) {
+  removeExportPanel();
+  revokeExportUrls();
+
+  const base = safeOutputName();
+  const htmlBlob = new Blob([html], { type: "text/html" });
+  const docBlob = new Blob([html], { type: "application/msword" });
+  const htmlUrl = URL.createObjectURL(htmlBlob);
+  const docUrl = URL.createObjectURL(docBlob);
+  state.exportUrls.push(htmlUrl, docUrl);
+
+  const panel = document.createElement("section");
+  panel.id = "exportPanel";
+  panel.className = "export-panel";
+  panel.innerHTML = `
+    <div class="export-panel-head">
+      <div>
+        <h2>Export preview ready</h2>
+        <p>${escapeHtml(message || "Use a manual button below. This is more reliable on iPhone and Android.")}</p>
+      </div>
+      <button id="closeExportPanelBtn" type="button" class="quiet">Close preview</button>
+    </div>
+    <div class="export-actions">
+      <a class="button-link" href="${docUrl}" download="${base}.doc">Download Word DOC</a>
+      <a class="button-link" href="${htmlUrl}" download="${base}.html">Download HTML</a>
+      <a class="button-link quiet-link" href="${htmlUrl}" target="_blank" rel="noopener">Open preview tab</a>
+      <button id="printPreviewBtn" type="button">Print / Save PDF</button>
+    </div>
+    <p class="help-text">On iPhone: after opening the preview or print dialog, use the Share button if you need to save to Files. The Word DOC is Word-compatible HTML, not a true DOCX file.</p>
+    <iframe class="export-frame" title="Appendix export preview"></iframe>
+  `;
+
+  document.querySelector(".app-shell").after(panel);
+  const frame = panel.querySelector("iframe");
+  frame.srcdoc = html;
+  panel.querySelector("#closeExportPanelBtn").addEventListener("click", removeExportPanel);
+  panel.querySelector("#printPreviewBtn").addEventListener("click", () => printFrame(frame, html));
+  panel.scrollIntoView({ behavior: "smooth", block: "start" });
+  els.statusText.textContent = "Export preview ready. Use the export panel below.";
+
+  if (type === "print") {
+    setTimeout(() => panel.querySelector("#printPreviewBtn").focus(), 100);
+  }
+}
+
+function printFrame(frame, html) {
+  try {
+    if (frame && frame.contentWindow) {
+      frame.contentWindow.focus();
+      frame.contentWindow.print();
+      return;
+    }
+  } catch (error) {
+    console.warn("Could not print iframe", error);
+  }
+
+  const printWindow = window.open("", "_blank");
+  if (!printWindow) {
+    alert("Your browser blocked the print window. Use Open preview tab, then print or share from there.");
+    return;
+  }
+  printWindow.document.open();
+  printWindow.document.write(html);
+  printWindow.document.close();
+  printWindow.focus();
+  setTimeout(() => printWindow.print(), 250);
+}
+
+function removeExportPanel() {
+  const existing = document.querySelector("#exportPanel");
+  if (existing) existing.remove();
+  revokeExportUrls();
+}
+
+function revokeExportUrls() {
+  state.exportUrls.forEach((url) => URL.revokeObjectURL(url));
+  state.exportUrls = [];
+}
+
+function chunkPhotos(photos, perPage) {
+  const chunks = [];
+  for (let i = 0; i < photos.length; i += perPage) {
+    chunks.push(photos.slice(i, i + perPage));
+  }
+  return chunks;
+}
+
+function googleMapsUrl(gps) {
+  return `https://www.google.com/maps?q=${gps.lat.toFixed(8)},${gps.lon.toFixed(8)}`;
+}
+
+function downloadGpsCsv() {
+  if (!ensurePhotosBeforeExport()) return;
+  const rows = [["Photo", "Filename", "Caption", "Latitude", "Longitude", "DateTime", "GoogleMaps"]];
+  state.photos.forEach((photo, index) => {
+    if (!photo.metadata.gps) return;
+    rows.push([
+      String(index + 1),
+      photo.displayName || displayFileName(photo.file, index + 1),
+      photo.caption,
+      photo.metadata.gps.lat.toFixed(8),
+      photo.metadata.gps.lon.toFixed(8),
+      photo.metadata.dateText || "",
+      googleMapsUrl(photo.metadata.gps),
+    ]);
+  });
+  const csv = rows.map((row) => row.map(csvCell).join(",")).join("\r\n");
+
+  if (useManualExportFlow()) {
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    state.exportUrls.push(url);
+    removeCsvPanel();
+    const panel = document.createElement("section");
+    panel.id = "csvPanel";
+    panel.className = "export-panel csv-panel";
+    panel.innerHTML = `<h2>GPS CSV ready</h2><a class="button-link" href="${url}" download="${safeOutputName()}_GPS.csv">Download GPS CSV</a>`;
+    document.querySelector(".app-shell").after(panel);
+    panel.scrollIntoView({ behavior: "smooth", block: "start" });
+    return;
+  }
+
+  downloadBlob(new Blob([csv], { type: "text/csv" }), `${safeOutputName()}_GPS.csv`);
+}
+
+function removeCsvPanel() {
+  const existing = document.querySelector("#csvPanel");
+  if (existing) existing.remove();
+}
+
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function safeOutputName() {
+  return (els.outputName.value || "Photo_Appendix").replace(/[^a-z0-9_-]+/gi, "_").replace(/^_+|_+$/g, "") || "Photo_Appendix";
+}
+
+function csvCell(value) {
+  return `"${String(value).replace(/"/g, '""')}"`;
+}
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"]/g, (char) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+  }[char]));
+}
+
+function waitOneFrame() {
+  return new Promise((resolve) => requestAnimationFrame(() => resolve()));
+}
+
+function waitForDocumentImages(doc) {
+  const images = Array.from(doc.images || []);
+  if (!images.length) return Promise.resolve();
+  return Promise.all(images.map((image) => {
+    if (image.complete) return Promise.resolve();
+    return new Promise((resolve) => {
+      image.addEventListener("load", resolve, { once: true });
+      image.addEventListener("error", resolve, { once: true });
+    });
+  }));
+}
+
+</script>
+</body>
+</html>
