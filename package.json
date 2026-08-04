@@ -1,0 +1,19 @@
+{
+  "name": "photo-appendix-generator",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Browser-based field photo appendix generator.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "vite": "8.2.0",
+    "wrangler": "4.118.0"
+  },
+  "engines": {
+    "node": ">=22.12"
+  }
+}
