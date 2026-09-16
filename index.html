@@ -48,6 +48,26 @@
         color: #d4edf7;
         font-size: 13px;
       }
+      .topbar-main {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .hub-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 10px;
+        border: 1px solid rgba(255, 255, 255, 0.45);
+        border-radius: 6px;
+        color: #fff;
+        font-weight: 700;
+        text-decoration: none;
+        white-space: nowrap;
+      }
+      .hub-back:hover {
+        background: rgba(255, 255, 255, 0.16);
+      }
       .brand {
         font-weight: 700;
         white-space: nowrap;
@@ -375,9 +395,17 @@
   </head>
   <body>
     <header class="topbar">
-      <div>
-        <h1>Photo Appendix Generator</h1>
-        <p>Browser-based field photo appendix tool</p>
+      <div class="topbar-main">
+        <a
+          class="hub-back"
+          href="https://matthew-tool-hub.matthewraison.chatgpt.site"
+          aria-label="Back to Tool Hub"
+          >← <span>Tool Hub</span></a
+        >
+        <div>
+          <h1>Photo Appendix Generator</h1>
+          <p>Browser-based field photo appendix tool</p>
+        </div>
       </div>
       <div id="topBrand" class="brand">Your Company</div>
     </header>
