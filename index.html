@@ -391,6 +391,29 @@
           min-height: 0;
         }
       }
+    @media screen{
+:root{--gw-ink:#1d343b;--gw-muted:#536a66;--gw-line:#dce4df;--gw-green:#1c6f5d;--gw-deep:#102e2b;--gw-pale:#e8f1e9;--gw-bg:#f3f5f1;--gw-white:#fff;--gw-radius:10px;--gw-shadow:0 6px 20px rgba(16,46,43,.06);}
+:focus-visible{outline:2px solid #26806b;outline-offset:3px}
+.gw-kicker{display:block;font:600 .68rem/1.4 ui-monospace,monospace;letter-spacing:.13em;text-transform:uppercase;margin:0 0 .45rem;color:var(--gw-green)}
+.gw-back{color:var(--gw-green);font-size:.78rem;font-weight:650;text-decoration:none;white-space:nowrap}
+.gw-back:hover{text-decoration:underline}
+body{font-family:Inter,ui-sans-serif,system-ui,sans-serif;background:var(--gw-bg);color:var(--gw-ink)}
+.topbar{background:var(--gw-deep);color:#eef4eb;border-bottom:1px solid #345146}
+.topbar h1{font-size:clamp(1.45rem,3.5vw,2.2rem);font-weight:650;letter-spacing:-.035em}
+.topbar p,.topbar .gw-kicker,.topbar .brand{color:#cadbd3}
+.hub-back{color:#eef4eb;background:#23473e;border-color:#537367}
+.hub-back:hover{background:#34594f}
+.panel,.workspace{border-color:var(--gw-line);border-radius:var(--gw-radius);box-shadow:var(--gw-shadow)}
+fieldset,.photo,.drop{border-color:var(--gw-line)}
+legend,.workspace h2,.drop{color:var(--gw-deep)}
+.drop,.badge,button.light{background:var(--gw-pale);color:var(--gw-deep)}
+.drop.drag{background:#d8e9dd;border-color:var(--gw-green)}
+button:not(.quiet):not(.light):not(.danger){background:var(--gw-green);color:#fff}
+button:not(.quiet):not(.light):not(.danger):hover{background:#145b4b}
+input,textarea,select{accent-color:var(--gw-green)}
+input[type=text],input[type=file],textarea,select{border-color:#cbd8cf}
+@media(max-width:560px){.topbar,.topbar-main{align-items:flex-start;flex-wrap:wrap}}
+}
     </style>
   </head>
   <body>
@@ -398,11 +421,12 @@
       <div class="topbar-main">
         <a
           class="hub-back"
-          href="https://matthew-tool-hub.matthewraison.chatgpt.site"
-          aria-label="Back to Tool Hub"
-          >← <span>Tool Hub</span></a
+          href="https://groundwork.matthewraison.workers.dev/"
+          aria-label="Back to Groundwork"
+          >← <span>Groundwork</span></a
         >
         <div>
+          <span class="gw-kicker">Groundwork · Reporting</span>
           <h1>Photo Appendix Generator</h1>
           <p>Browser-based field photo appendix tool</p>
         </div>
