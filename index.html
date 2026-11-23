@@ -529,19 +529,20 @@
               ><input id="includeDate" type="checkbox" checked /> Include
               date/time</label
             ><label
-              ><input id="includeGps" type="checkbox" checked /> Include GPS
+              ><input id="includeGps" type="checkbox" /> Include GPS
               coordinates</label
             ><label
               ><input id="includeFilename" type="checkbox" /> Include
               filename</label
             ><label
-              ><input id="includeMaps" type="checkbox" checked /> Include Google
+              ><input id="includeMaps" type="checkbox" /> Include Google
               Maps link</label
             ><label
-              ><input id="useDeviceGps" type="checkbox" checked /> Use current
+              ><input id="useDeviceGps" type="checkbox" /> Use current
               device location when photo GPS is missing</label
             >
           </div>
+          <p class="muted" role="note">Privacy: GPS coordinates, Google Maps links and automatic device-location lookup are off by default. Enable only when approved for your project; map links send coordinates to Google when opened.</p>
         </fieldset>
         <div class="actions">
           <button id="printBtn" type="button">Print / Save PDF</button
@@ -555,7 +556,7 @@
           </button>
         </div>
         <div id="status" class="status">
-          Settings save in this browser only.
+          Appearance preferences save in this browser only. Project details, logo and location choices are session-only. Exports may contain confidential photographs, captions and location information.
         </div>
       </section>
       <section class="workspace" aria-label="Photo workspace">
@@ -586,6 +587,7 @@
       </section>
     </main>
     <script type="module">
+      import { sanitizeSettings, gpsCsvWarning } from "./privacy.js";
       const state = {
         photos: [],
         seen: new Set(),
@@ -723,50 +725,29 @@
         els.pickStatus.className = "status " + type;
       }
       function saveSettings() {
-        const s = { logo: state.logo };
-        [
-          "appendixTitle",
-          "projectName",
-          "reportDate",
-          "outputName",
-          "companyName",
-          "brandName",
-          "colourPreset",
-          "accent",
-          "strong",
-          "perPage",
-          "orientation",
-          "fit",
-          "quality",
-          "includeDate",
-          "includeGps",
-          "includeFilename",
-          "includeMaps",
-          "useDeviceGps",
-        ].forEach((k) => {
-          const el = els[k];
-          s[k] = el.type === "checkbox" ? el.checked : el.value;
-        });
+        const values = {};
+        for (const key of ['colourPreset','accent','strong','perPage','orientation','fit','quality','includeDate','includeFilename']) {
+          const element = els[key];
+          values[key] = element.type === 'checkbox' ? element.checked : element.value;
+        }
         try {
-          localStorage.setItem("photoAppendixSettings", JSON.stringify(s));
+          localStorage.setItem('photoAppendixSettings', JSON.stringify(sanitizeSettings(values)));
         } catch (e) {}
       }
       function loadSettings() {
         try {
-          const s = JSON.parse(
-            localStorage.getItem("photoAppendixSettings") || "{}",
-          );
-          Object.entries(s).forEach(([k, v]) => {
-            if (k === "logo" && v) {
-              state.logo = v;
-              els.logoPreview.src = v;
-              els.logoPreview.style.display = "block";
-            } else if (els[k]) {
-              if (els[k].type === "checkbox") els[k].checked = !!v;
-              else if (typeof v === "string") els[k].value = v;
-            }
+          const saved = sanitizeSettings(JSON.parse(localStorage.getItem('photoAppendixSettings') || '{}'));
+          // Sanitise legacy settings immediately: old versions stored names, logos, GPS choices.
+          localStorage.setItem('photoAppendixSettings', JSON.stringify(saved));
+          Object.entries(saved).forEach(([key,value]) => {
+            if (els[key].type === 'checkbox') els[key].checked = value;
+            else els[key].value = value;
           });
         } catch (e) {}
+        // Consent to location collection and disclosure is always per-session.
+        els.includeGps.checked = false;
+        els.includeMaps.checked = false;
+        els.useDeviceGps.checked = false;
         applyTheme();
       }
       function applyTheme() {
@@ -1117,6 +1098,10 @@
           );
           state.photos = [];
           state.seen.clear();
+          state.lastLocation = null;
+          state.lastHtml = "";
+          els.previewFrame.removeAttribute("srcdoc");
+          els.preview.classList.remove("open");
           render();
         }
       }
@@ -1170,16 +1155,30 @@
           c.getContext("2d").drawImage(bmp, 0, 0, w, h);
           return c.toDataURL("image/jpeg", q);
         } catch (e) {
-          return await readFileAsDataUrl(file).catch(() => placeholderData());
+          // Never embed original file bytes: they can retain EXIF coordinates
+          // even when the visible GPS metadata option is unchecked.
+          return await imageDataFromLocalImage(file).catch(() => placeholderData());
         }
       }
-      function readFileAsDataUrl(f) {
-        return new Promise((res, rej) => {
-          const r = new FileReader();
-          r.onload = () => res(r.result);
-          r.onerror = () => rej(r.error);
-          r.readAsDataURL(f);
-        });
+      async function imageDataFromLocalImage(file) {
+        const url = URL.createObjectURL(file);
+        try {
+          const image = new Image();
+          await new Promise((resolve, reject) => {
+            image.onload = resolve;
+            image.onerror = reject;
+            image.src = url;
+          });
+          const [max, q] = dims();
+          const ratio = Math.min(1, max / Math.max(image.naturalWidth, image.naturalHeight));
+          const canvas = document.createElement("canvas");
+          canvas.width = Math.max(1, Math.round(image.naturalWidth * ratio));
+          canvas.height = Math.max(1, Math.round(image.naturalHeight * ratio));
+          canvas.getContext("2d").drawImage(image, 0, 0, canvas.width, canvas.height);
+          return canvas.toDataURL("image/jpeg", q);
+        } finally {
+          URL.revokeObjectURL(url);
+        }
       }
       function placeholderData() {
         const c = document.createElement("canvas");
@@ -1275,6 +1274,7 @@
           alert("No photos have been added yet.");
           return;
         }
+        if (!confirm(gpsCsvWarning)) return;
         const rows = [
           [
             "Photo",
