@@ -31,3 +31,10 @@ test('runtime defaults keep geolocation and outbound maps opt-in', () => {
   assert.match(html,/state\.lastHtml = ""/);
   assert.match(html,/confirm\(gpsCsvWarning\)/);
 });
+
+test('image fallback re-encodes pixels rather than embedding original EXIF bytes', () => {
+  const html=readFileSync(new URL('../index.html',import.meta.url),'utf8');
+  assert.match(html,/imageDataFromLocalImage\(file\)/);
+  assert.doesNotMatch(html,/return await readFileAsDataUrl\(file\)/);
+  assert.match(html,/URL\.revokeObjectURL\(url\)/);
+});
